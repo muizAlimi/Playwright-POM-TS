@@ -16,7 +16,7 @@ playwright_pom
 |    |-- BasePage.ts   
 |    |-- LoginPage.ts
 |    |-- SecurePage.ts
-|    |-- ChecboxesPage.ts
+|    |-- CheckboxesPage.ts
 |    |-- PageManager.ts
 |
 |-- tests/
