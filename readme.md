@@ -52,15 +52,15 @@ playwright_pom/
 
 ```ts
 abstract class BasePage {
-  protected async basePageFill(sel: string | Locator, v: string) {
-    await this.toLocator(sel).fill(v);
+  protected async basePageFill(selector: string | Locator, text: string) {
+    await this.toLocator(selector).fill(text);
   }
 }
 
 class LoginPage extends BasePage {
-  async login(u: string, p: string) {
-    await this.basePageFill('#username', u);
-    await this.basePageFill('#password', p);
+  async login(username: string, password: string) {
+    await this.basePageFill('#username', username);
+    await this.basePageFill('#password', password);
   }
 }
 
