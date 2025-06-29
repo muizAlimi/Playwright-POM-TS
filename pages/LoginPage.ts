@@ -1,49 +1,25 @@
-// ─────────────────────────────────────────────────────────────
-// PAGE OBJECT:  LoginPage  ( /login )
-// STYLE 2 — INLINE LOCATORS
-// -------------------------------------------------------------
-// WHY CHOOSE THIS STYLE?
-// • The page touches only a handful of elements.
-// • You want minimum boilerplate: no constructor, no fields.
-//
-// TRADE-OFFS
-// • If the selector '#username' is reused in 5 methods you'll repeat it 5 times (harder to refactor later).
-// • Slightly slower if you reference the same selector many times, because Playwright re-parses it each call.
-//
-// Rule of thumb:  < 6 reusable elements  → inline is fine.
-// ─────────────────────────────────────────────────────────────
-
 import { BasePage } from './BasePage';
 import { expect } from '@playwright/test';
 
+// this page is using inline locators, inline locators are defined directly in the methods, not as class properties.
 export class LoginPage extends BasePage {
     /* public business actions */
-    async open() {
+    async openLoginPage() {
         await this.goToUrl('/login');
     }
 
-    async login(user: string, pass: string) {
-        // If you want to use inline locators, you can store them in a variable:
-        const userField = this.page.locator('#username');
-        // This is fill from Playwright's Locator API:
-        await userField.fill(user);
-
-        // You can also use the helper `fill` from BasePage:
-        await this.basePageFill('#password', pass);
-
-        // You can use inline locators directly:
-        await this.page.locator('button[type=submit]').click();
-        // Or use the helper `click` from BasePage:
-        // await this.basePageClick('button[type=submit]');
+    async userLogin(username: string, password: string) {
+        // Fill username and password fields using helper from BasePage:
+        await this.basePageFill(this.page.getByLabel('Username'), username); // playwright selector
+        await this.basePageFill('#password', password); // CSS selector
+        await this.basePageClick('xpath=//button[contains(., "Login")]'); // XPath selector
     }
 
-    async assertSuccess() {
-        const banner = this.page.locator('#flash');
-        await this.basePageExpectVisible(banner);                 // helper from BasePage
-        await expect(banner).toContainText('You logged into a secure area!');
+    // Assert failed login message
+    async assertFailedUsername() {
+        await this.basePageExpectVisible(this.page.locator('#flash'));
+        // if needed you can use playwright's api directly instead of basePage methods
+        await expect(this.page.locator('#flash')).toContainText('Your username is invalid!');
     }
 
-    async assertError(expectedMessage: string) {
-        await expect(this.page.locator('#flash')).toContainText(expectedMessage);
-    }
 }

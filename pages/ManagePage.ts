@@ -1,23 +1,7 @@
-// pages/ManagePage.ts
-// -------------------------------------------------------------
-// This is a factory for page objects, which allows lazy loading
-// of page objects.  It is a common pattern in Page Object Model
-// (POM) to centralise page object creation.
-// ─────────────────────────────────────────────────────────────
-// In a large suite, a test might use only LoginPage.  With lazy
-// getters we avoid building SecurePage / CheckboxesPage unless
-// the test actually touches them.
-// ─────────────────────────────────────────────────────────────
-// Trade-off: lazy getters add a bit of boilerplate code
-//  For smaller projects you could use *eager* construction instead, they will be instantiated
-//  immediately when the ManagePage is created
-//  this.loginPage = new LoginPage(page); 
-//  this.securePage = new SecurePage(page);
-//  this.checkboxesPage = new CheckboxesPage(page);
-//
-// Lazy getters are better for larger projects
-// where you want to avoid unnecessary page object instantiation.
-// ─────────────────────────────────────────────────────────────
+// ManagePage acts as a central hub for all page objects in the app.
+// It uses lazy getters to create each page object only when needed.
+// This saves resources in large test suites, as unused pages are not built.
+// For small projects, you could create all page objects up front instead.
 
 import { Page } from '@playwright/test';
 import { LoginPage } from './LoginPage';
@@ -32,7 +16,7 @@ export default class ManagePage {
     private _secure?: SecurePage;
     private _checkboxes?: CheckboxesPage;
 
-    /** Lazy + cached instance of LoginPage */
+    // Lazy getter: creates the page object only on first use, then reuses it.
     get loginPage(): LoginPage {
         if (!this._login) {
             this._login = new LoginPage(this.page);
@@ -40,19 +24,12 @@ export default class ManagePage {
         return this._login;
     }
 
-    /** Lazy + cached instance of SecurePage */
+    // same lazy getter code but in one line 
     get securePage(): SecurePage {
-        if (!this._secure) {
-            this._secure = new SecurePage(this.page);
-        }
-        return this._secure;
+        return this._secure ??= new SecurePage(this.page);
     }
 
-    /** Lazy + cached instance of CheckboxesPage */
     get checkboxesPage(): CheckboxesPage {
-        if (!this._checkboxes) {
-            this._checkboxes = new CheckboxesPage(this.page);
-        }
-        return this._checkboxes;
+        return this._checkboxes ??= new CheckboxesPage(this.page);
     }
 }

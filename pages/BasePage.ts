@@ -1,46 +1,38 @@
-// pages/BasePage.ts
-// ------------------------------------------------------------
-// BasePage (abstract)
-// ------------------------------------------------------------
-// • Stores one Playwright `Page` instance.
-// • `page` is protected, so only subclasses (e.g., LoginPage)
-//   can use it.  Test files cannot access it directly.
-// • Low-level helpers (`click`, `fill`, …) are also protected,
-//   forcing tests to rely on high-level page actions.
-// ------------------------------------------------------------
 
+// BasePage stores Playwright `Page` instance. Class is protected, so only extending classes can access it.
 import { Page, Locator, expect } from '@playwright/test';
 
 export abstract class BasePage {
-  /**
-   * Browser tab reference.
-   *   protected  → visible to subclasses, hidden from tests
-   *   readonly   → cannot be reassigned after construction
-   */
-  constructor(protected readonly page: Page) {}
+  // BasePage is an abstract class, so it cannot be instantiated directly.
+  // It is designed to be extended by other page classes.
+  constructor(protected readonly page: Page) { }
 
-  /* ========== Core navigation (protected) ========== */
-  /** Visit an app path such as '/login'. */
+  /* ========== Navigation ========== */
+  // Navigate to a specific URL path.
   protected async goToUrl(path: string) {
     await this.page.goto(path);
   }
 
   /* ========== Low-level helpers (protected) ========== */
-  protected async basePageClick(sel: string | Locator) {
-    await this.toLocator(sel).click();
+  // These methods are intended for use by extending classes only.
+  protected async basePageClick(selector: string | Locator) {
+    await this.toLocator(selector).click();
   }
 
-  protected async basePageFill(sel: string | Locator, value: string) {
-    await this.toLocator(sel).fill(value);
+  protected async basePageFill(selector: string | Locator, value: string) {
+    await this.toLocator(selector).fill(value);
   }
 
-  protected async basePageExpectVisible(sel: string | Locator) {
-    await expect(this.toLocator(sel)).toBeVisible();
+  protected async basePageExpectVisible(selector: string | Locator) {
+    await expect(this.toLocator(selector)).toBeVisible();
   }
 
   /* ========== Utility ========== */
-  /** Accepts a raw selector or Locator and always returns a Locator. */
-  protected toLocator(sel: string | Locator): Locator {
-    return typeof sel === 'string' ? this.page.locator(sel) : sel;
+  // This method is used to convert a string selector into a Locator.
+  protected toLocator(selector: string | Locator): Locator {
+    return typeof selector === 'string'
+      ? this.page.locator(selector)   // if string selector received → create a Locator
+      : selector;                     // else already a Locator → return unchanged
   }
+
 }
