@@ -1,42 +1,57 @@
 # Playwright + TypeScript — Page Object Model Example
 
-A minimal POM framework that demonstrates clean page objects, a shared `BasePage`, and a simple test suite.
-
----
-
-## 📺 Video series
-
-Watch the full **Playwright with TypeScript** playlist here →  
-https://www.youtube.com/watch?v=Gxn0i76jIJI&list=PLfw_nI4u_6WOuClIHl4Wl5V--ufJGin71
+> A minimal, beginner-friendly POM starter that powers my YouTube series  
+> **“Playwright for QA Automation (TypeScript)”**.
 
 ---
 
 ## 🚀 Quick start
 
 ```bash
-# 1. Install deps
-npm i       
+# 1 Clone & install
+git clone https://github.com/alexusadays/Playwright-POM-TS.git
+cd Playwright-POM-TS
+npm ci            # Node 18 + recommended
 
-# 2. Scaffold Playwright config (if you don’t have one yet)
-npx playwright@latest init
+# 2 Run the tests
+npx playwright test
+```
+
+Want the exact code shown in **Video 1**? Check out the tag:
+
+```bash
+git checkout v0-baseline
 ```
 
 ---
 
-## 📂 Project structure
+## 🗂️ Project structure
 
-```text
-playwright_pom/
-├─ pages/
-│  ├─ BasePage.ts
-│  ├─ LoginPage.ts
-│  ├─ SecurePage.ts
-│  ├─ CheckboxesPage.ts
-│  └─ PageManager.ts
-└─ tests/
-   ├─ login.spec.ts
-   └─ checkboxes.spec.ts
 ```
+.
+├─ pages/
+│  ├─ BasePage.ts          # shared helper methods
+│  ├─ CheckboxesPage.ts    # reusable-locator example
+│  ├─ LoginPage.ts         # inline-locator example
+│  ├─ ManagePage.ts        # lazy POM factory
+│  └─ SecurePage.ts        
+├─ tests/
+│  ├─ checkboxes.spec.ts
+│  └─ login.spec.ts
+├─ playwright.config.ts
+├─ package.json
+└─ README.md
+```
+
+---
+
+## 🗺️ Course checkpoints
+
+| Stage | Git tag                     | Branch               |
+|-------|-----------------------------|----------------------|
+| 0 Baseline POM           | `v0-baseline` | `lesson/00-baseline` |
+| 1 Fixtures (coming)      | _TBD_         | `lesson/01-fixtures` |
+| 2 GitHub Actions (coming)| _TBD_         | `lesson/02-ci`       |
 
 ---
 
@@ -79,4 +94,13 @@ class LoginPage extends BasePage {
 
 ---
 
-Happy testing! 🚀
+### Prerequisites
+
+* **Node.js ≥ 18**
+* **Playwright** is already in `devDependencies`; no global install needed.
+
+---
+
+### License
+
+MIT – use it, fork it, star it ⭐️, enjoy!
