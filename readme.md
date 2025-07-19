@@ -50,11 +50,11 @@ git checkout v0-baseline
 
 ## 🗺️ Course checkpoints
 
-| Stage | Git tag                     | Branch               |
-|-------|-----------------------------|----------------------|
-| 0 Baseline POM           | `v0-baseline` | `lesson/00-baseline` |
-| 1 Fixtures (coming)      | _TBD_         | `lesson/01-fixtures` |
-| 2 GitHub Actions (coming)| _TBD_         | `lesson/02-ci`       |
+| Stage                    | Git tag               | Branch               |
+|--------------------------|-----------------------|----------------------|
+| 0 Baseline POM           | `v0-baseline`         | `lesson/00-baseline`          |
+| 1 Fixtures (coming)      | `v1-fixtures`         | `lesson/01-fixtures`          |
+| 2 GitHub Actions (coming)| `v2-ci-github-action` | `lesson/02-ci-github-action`  |
 
 ---
 
