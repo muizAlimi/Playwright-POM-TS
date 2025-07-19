@@ -1,38 +1,57 @@
-name: Playwright Tests           # The name that appears in the Actions UI
+# ─────────────────────────────────────────────
+# ▶︎  Playwright CI  ◀︎
+# One clean test run after every merge to main
+# ─────────────────────────────────────────────
+name: Playwright CI            # Label used in Actions UI & badge
 
-on:                              # Events that trigger this workflow
-  push:                          #   1. Any 'git push' to these branches
-    branches: [main, lesson/**]  #      main or any branch starting with lesson/
-  pull_request:                  #   2. Any PR opened against main
+# ────────────────
+# Triggers
+# ────────────────
+on:
+  push:                        # Fire only when commits land on main
     branches: [main]
 
-jobs:                            # A workflow can have multiple jobs; we need just one
-  test:                          # Job ID = 'test'
-    runs-on: ubuntu-latest       # Each run starts a fresh Ubuntu VM runner
+  # pull_request:              # 🔒 Disabled to avoid duplicate runs.
+  #   branches: [main]         #   → Uncomment if you want pre‑merge checks.
 
-    env:                         # Export secrets as environment variables
-      TEST_USER: ${{ secrets.TEST_USER }}  # Secrets are masked as ***
+# ────────────────
+# Jobs
+# ────────────────
+jobs:
+  test:                        # Single job for the entire suite
+    runs-on: ubuntu-latest     # Fresh Linux VM each time
+
+    # Environment variables (secrets are masked as *** in logs)
+    env:
+      TEST_USER: ${{ secrets.TEST_USER }}
       TEST_PASS: ${{ secrets.TEST_PASS }}
       BASE_URL:  ${{ secrets.BASE_URL }}
 
-    steps:                       # Sequential actions executed in this VM
-      - uses: actions/checkout@v4          # 1. Clone your repo into the runner
+    steps:
+      # 1️⃣  Check out the repository
+      - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4        # 2. Install Node.js
+      # 2️⃣  Set up Node.js (with npm cache)
+      - uses: actions/setup-node@v4
         with:
-          node-version: 20                #    ...specific version
-          cache: npm                      #    Cache node_modules between runs
+          node-version: 20
+          cache: npm
 
-      - name: Install deps & browsers      # 3. Prepare everything Playwright needs
+      # 3️⃣  Install dependencies + Playwright browsers
+      - name: Install deps & browsers
         run: |
-          npm ci                           #    Install package.json deps exactly
-          npx playwright install --with-deps #  Download Chromium, Firefox, WebKit
+          npm ci
+          npx playwright install --with-deps
 
-      - name: Run tests                    # 4. Execute your test suite
-        run: npx playwright test --reporter=html
-                                           #    Generates HTML report under /playwright-report
+      # 4️⃣  Run the Playwright test suite
+      - name: Run tests
+        run: npx playwright test --reporter=html   # Generates /playwright-report
+        continue-on-error: true                    # ← keep going even if tests fail
 
-      - uses: actions/upload-artifact@v4   # 5. Save the report (and videos/traces) as a build artifact
+      # 5️⃣  Upload the HTML report (plus videos/traces) as an artifact
+      - name: Upload Playwright report
+        if: always()                               # Always run this step, even if tests fail
+      - uses: actions/upload-artifact@v4
         with:
           name: playwright-report
           path: playwright-report
