@@ -6,6 +6,9 @@
 > **“Learn QA Automation with Playwright Typescript”**.
 > https://www.youtube.com/watch?v=Gxn0i76jIJI&list=PLfw_nI4u_6WOuClIHl4Wl5V--ufJGin71
 
+> **Need the quick CI setup steps?**  
+> See **[CI_GitHub_Actions_Checklist.md](./github_actions_checklist.md)** ✅
+
 ---
 
 ## 🚀 Quick start
