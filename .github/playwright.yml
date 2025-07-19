@@ -1,0 +1,38 @@
+name: Playwright Tests           # The name that appears in the Actions UI
+
+on:                              # Events that trigger this workflow
+  push:                          #   1. Any 'git push' to these branches
+    branches: [main, lesson/**]  #      main or any branch starting with lesson/
+  pull_request:                  #   2. Any PR opened against main
+    branches: [main]
+
+jobs:                            # A workflow can have multiple jobs; we need just one
+  test:                          # Job ID = 'test'
+    runs-on: ubuntu-latest       # Each run starts a fresh Ubuntu VM runner
+
+    env:                         # Export secrets as environment variables
+      TEST_USER: ${{ secrets.TEST_USER }}  # Secrets are masked as ***
+      TEST_PASS: ${{ secrets.TEST_PASS }}
+      BASE_URL:  ${{ secrets.BASE_URL }}
+
+    steps:                       # Sequential actions executed in this VM
+      - uses: actions/checkout@v4          # 1. Clone your repo into the runner
+
+      - uses: actions/setup-node@v4        # 2. Install Node.js
+        with:
+          node-version: 20                #    ...specific version
+          cache: npm                      #    Cache node_modules between runs
+
+      - name: Install deps & browsers      # 3. Prepare everything Playwright needs
+        run: |
+          npm ci                           #    Install package.json deps exactly
+          npx playwright install --with-deps #  Download Chromium, Firefox, WebKit
+
+      - name: Run tests                    # 4. Execute your test suite
+        run: npx playwright test --reporter=html
+                                           #    Generates HTML report under /playwright-report
+
+      - uses: actions/upload-artifact@v4   # 5. Save the report (and videos/traces) as a build artifact
+        with:
+          name: playwright-report
+          path: playwright-report

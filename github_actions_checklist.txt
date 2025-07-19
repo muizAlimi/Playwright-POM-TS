@@ -1,0 +1,13 @@
+1.  Install dotenv: npm i -D dotenv
+2.  Create secrets file: .env 
+3.  Add: user creds, url to .env
+4.  Add: .env to .gitignore
+5.  Add to playwright.config.ts: import 'dotenv/config'; 
+7.  Add to playwright.config.ts: use: { baseURL: process.env.BASE_URL }
+6.  Update test code: await pm.loginPage.login(process.env.TEST_USER!, process.env.TEST_PASS!);
+7.  Add GitHub Actions workflow: .github/workflows/playwright.yml
+8.  Add secrets to github: Repo → Settings → Secrets & variables → Actions
+9.  Expose secrets to runner in yml file: TEST_USER: ${{ secrets.TEST_USER }}
+10. Add CI badge to README ![Playwright Tests](https://github.com/alexusadays/Playwright-POM-TS/actions/workflows/playwright.yml/badge.svg?branch=main)
+11. Commit & push
+12. Verify: Check Actions tab in githib
