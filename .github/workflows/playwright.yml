@@ -48,9 +48,8 @@ jobs:
       # 4️⃣  Run the Playwright test suite
       - name: Run Playwright tests
         run: npx playwright test --reporter=html     # Generates /playwright-report
-        continue-on-error: true                      # Keep pipeline moving even on failures
 
-      # 5️⃣  Upload the HTML report (plus videos/traces) as an artifact
+      # 5️⃣  Upload the HTML report even if tests fail
       - name: Upload Playwright report
         if: always()                                 # Always run, even if tests fail
         uses: actions/upload-artifact@v4
