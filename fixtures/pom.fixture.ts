@@ -4,10 +4,10 @@
 
 import { test as base } from '@playwright/test';
 import PomManager from '../pages/ManagePage';
-import user from '../test-data/validUser.json';
+import {validUser} from '../test-data/validUser';
 
 type MyFixtures = {
-  pm: PomManager;                       
+  pm: PomManager;                     
   validUser: { username: string; password: string };
 };
 
@@ -18,7 +18,7 @@ export const test = base.extend<MyFixtures>({
   },
 
   // Plain value fixture (available in every test)
-  validUser: user,
+  validUser,
 });
 
 export { expect } from '@playwright/test';
